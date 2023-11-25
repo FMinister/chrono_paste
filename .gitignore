@@ -21,3 +21,4 @@
 go.work
 .vscode/launch.json
 tmp/main
+tmp/build-errors.log
