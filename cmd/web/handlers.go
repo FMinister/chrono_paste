@@ -1,8 +1,9 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
+	"strconv"
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -15,7 +16,13 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func chronoView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display a specific snippet..."))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	fmt.Fprintf(w, "Display a specific chrono with ID %d...", id)
 }
 
 func chronoCreate(w http.ResponseWriter, r *http.Request) {
@@ -27,19 +34,5 @@ func chronoCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Create a new snippet..."))
+	w.Write([]byte("Create a new chrono..."))
 }
-
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/chrono/view", chronoView)
-	mux.HandleFunc("/chrono/create", chronoCreate)
-
-	log.Println("Starting server on :8080")
-
-	err := http.ListenAndServe(":8080", mux)
-	log.Fatal(err)
-}
-
-// 2.05-url-query-strings.html
