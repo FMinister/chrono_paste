@@ -2,13 +2,16 @@ package main
 
 import (
 	"flag"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 )
 
 func main() {
 	addr := flag.String("addr", ":8080", "HTTP network address")
 	flag.Parse()
+
+	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
 
 	mux := http.NewServeMux()
 
@@ -19,10 +22,11 @@ func main() {
 	mux.HandleFunc("/chrono/view", chronoView)
 	mux.HandleFunc("/chrono/create", chronoCreate)
 
-	log.Printf("Starting server on %s", *addr)
+	logger.Info("starting server", slog.String("addr", *addr))
 
 	err := http.ListenAndServe(*addr, mux)
-	log.Fatal(err)
+	logger.Error(err.Error())
+	os.Exit(1)
 }
 
 // 2.05-url-query-strings.html
