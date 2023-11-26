@@ -11,7 +11,11 @@ func main() {
 	addr := flag.String("addr", ":8080", "HTTP network address")
 	flag.Parse()
 
-	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
+	// logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
+	logger := slog.New(slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
+		Level:     slog.LevelDebug,
+		AddSource: true,
+	}))
 
 	mux := http.NewServeMux()
 
@@ -29,4 +33,6 @@ func main() {
 	os.Exit(1)
 }
 
-// 2.05-url-query-strings.html
+// Logging to a file with flag
+// go run ./cmd/web >>/tmp/web.log
+// Note: Using the double arrow >> will append to an existing file, instead of truncating it when starting the application.
