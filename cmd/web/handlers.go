@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"text/template"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -22,21 +22,27 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Print(err.Error())
+		app.logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
 	err = ts.ExecuteTemplate(w, "base", nil)
 	if err != nil {
-		log.Print(err.Error())
+		app.logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
-func chronoView(w http.ResponseWriter, r *http.Request) {
+func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
-	if err != nil || id < 1 {
+	if err != nil {
+		app.logger.Error(err.Error(), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
+		http.NotFound(w, r)
+		return
+	}
+	if id < 1 {
+		app.logger.Error("id is < 1", slog.Int("id", id), slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 		http.NotFound(w, r)
 		return
 	}
@@ -44,11 +50,12 @@ func chronoView(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Display a specific chrono with ID %d...", id)
 }
 
-func chronoCreate(w http.ResponseWriter, r *http.Request) {
+func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
 		// w.WriteHeader(http.StatusMethodNotAllowed)
 		// w.Write([]byte("Method not allowed"))
+		app.logger.Info("method not allowed", slog.String("method", r.Method), slog.String("uri", r.URL.RequestURI()))
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
