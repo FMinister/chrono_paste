@@ -17,3 +17,19 @@ Key Features:
 - Anonymously share content without the need for an account.
 
 Experience the freedom of temporary sharing with ChronoPaste.
+
+## Some notes
+
+Connect into the container:
+
+```bash
+docker exec -it <container-id> bash
+```
+
+Check is user has access to the database:
+
+```bash
+psql -d <DB-name> -U <DB username>
+```
+
+If successful, you should be able to select data from the `chronos` table.
