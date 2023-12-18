@@ -50,5 +50,31 @@ func (m *ChronoModel) Get(id int) (Chrono, error) {
 }
 
 func (m *ChronoModel) Latest() ([]Chrono, error) {
-	return nil, nil
+	stmt := `SELECT id, title, content, created, expires FROM chronos
+			WHERE expires > CURRENT_TIMESTAMP ORDER BY created DESC LIMIT 10`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var chronos []Chrono
+
+	for rows.Next() {
+		var c Chrono
+		err := rows.Scan(&c.ID, &c.Title, &c.Content, &c.Created, &c.Expires)
+		if err != nil {
+			return nil, err
+		}
+
+		chronos = append(chronos, c)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return chronos, nil
 }
