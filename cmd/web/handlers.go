@@ -1,10 +1,13 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 	"text/template"
+
+	"github.com/FMinister/chrono_paste/internal/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +41,17 @@ func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Display a specific chrono with ID %d...", id)
+	chrono, err := app.chronos.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	fmt.Fprintf(w, "%+v", chrono)
 }
 
 func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
@@ -50,5 +63,15 @@ func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Create a new chrono..."))
+	title := "This is a dummy title"
+	content := "This is a dummy content"
+	expires := 7
+
+	id, err := app.chronos.Insert(title, content, expires)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/chrono/view?id=%d", id), http.StatusSeeOther)
 }
