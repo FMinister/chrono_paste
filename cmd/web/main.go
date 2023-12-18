@@ -7,11 +7,13 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/FMinister/chrono_paste/internal/models"
 	_ "github.com/lib/pq"
 )
 
 type application struct {
-	logger *slog.Logger
+	logger  *slog.Logger
+	chronos *models.ChronoModel
 }
 
 func main() {
@@ -34,7 +36,8 @@ func main() {
 	defer db.Close()
 
 	app := &application{
-		logger: logger,
+		logger:  logger,
+		chronos: &models.ChronoModel{DB: db},
 	}
 
 	logger.Info("starting server", slog.String("addr", *addr))
