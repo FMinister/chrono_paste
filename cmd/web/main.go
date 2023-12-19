@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"html/template"
 	"log/slog"
 	"net/http"
 	"os"
@@ -12,8 +13,9 @@ import (
 )
 
 type application struct {
-	logger  *slog.Logger
-	chronos *models.ChronoModel
+	logger        *slog.Logger
+	chronos       *models.ChronoModel
+	templateCache map[string]*template.Template
 }
 
 func main() {
@@ -32,12 +34,18 @@ func main() {
 		logger.Error(err.Error())
 		os.Exit(1)
 	}
-
 	defer db.Close()
 
+	templateCache, err := newTemplateCache()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+
 	app := &application{
-		logger:  logger,
-		chronos: &models.ChronoModel{DB: db},
+		logger:        logger,
+		chronos:       &models.ChronoModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	logger.Info("starting server", slog.String("addr", *addr))
