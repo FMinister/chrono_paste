@@ -22,9 +22,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.render(w, r, http.StatusOK, "home.tmpl.html", templateData{
-		Chronos: chronos,
-	})
+	data := app.newTemplateData(r)
+	data.Chronos = chronos
+
+	app.render(w, r, http.StatusOK, "home.tmpl.html", data)
 }
 
 func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
@@ -44,9 +45,10 @@ func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.render(w, r, http.StatusOK, "view.tmpl.html", templateData{
-		Chrono: chrono,
-	})
+	data := app.newTemplateData(r)
+	data.Chrono = chrono
+
+	app.render(w, r, http.StatusOK, "view.tmpl.html", data)
 }
 
 func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {

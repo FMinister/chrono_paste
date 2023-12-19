@@ -8,8 +8,9 @@ import (
 )
 
 type templateData struct {
-	Chrono  models.Chrono
-	Chronos []models.Chrono
+	CurrentYear int
+	Chrono      models.Chrono
+	Chronos     []models.Chrono
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {
