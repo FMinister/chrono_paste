@@ -59,7 +59,7 @@ func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	title := "This is a dummy title"
-	content := "This is a dummy content"
+	content := "This is \n a dummy content"
 	expires := 7
 
 	id, err := app.chronos.Insert(title, content, expires)
