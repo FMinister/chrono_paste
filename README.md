@@ -33,3 +33,21 @@ psql -d <DB-name> -U <DB username>
 ```
 
 If successful, you should be able to select data from the `chronos` table.
+
+Panic recovery in background goroutines:
+
+```go
+func (app *application) background(fn func()) {
+    app.wg.Add(1)
+    go func() {
+        defer app.wg.Done()
+        defer func() {
+            if err := recover(); err != nil {
+                app.logger.Errorf(fmt.Sprintf("%s", err))
+            }
+        }()
+        
+        doSomeBackgroundProcessing()
+    }()
+}
+```
