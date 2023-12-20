@@ -12,5 +12,5 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("/chrono/view", app.chronoView)
 	mux.HandleFunc("/chrono/create", app.chronoCreate)
 
-	return secureHeaders(mux)
+	return app.logRequest(secureHeaders(mux))
 }
