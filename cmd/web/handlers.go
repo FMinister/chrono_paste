@@ -56,9 +56,19 @@ func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) chronoCreatePost(w http.ResponseWriter, r *http.Request) {
-	title := "O snail"
-	content := "O snail\nClimb Mount Fuji,\nBut slowly, slowly!\n\n- Kobayashi Issa"
-	expires := 14
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	title := r.PostForm.Get("title")
+	content := r.PostForm.Get("content")
+	expires, err := strconv.Atoi(r.PostForm.Get("expires"))
+	if err != nil || expires < 1 {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
 
 	id, err := app.chronos.Insert(title, content, expires)
 	if err != nil {
