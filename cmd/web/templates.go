@@ -12,6 +12,7 @@ type templateData struct {
 	CurrentYear int
 	Chrono      models.Chrono
 	Chronos     []models.Chrono
+	Form        any
 }
 
 var functions = template.FuncMap{
