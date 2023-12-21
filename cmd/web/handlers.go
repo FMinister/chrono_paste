@@ -50,7 +50,9 @@ func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) chronoCreate(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Display the chrono creation form..."))
+	data := app.newTemplateData(r)
+
+	app.render(w, r, http.StatusOK, "create.tmpl.html", data)
 }
 
 func (app *application) chronoCreatePost(w http.ResponseWriter, r *http.Request) {
