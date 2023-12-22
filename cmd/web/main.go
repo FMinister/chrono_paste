@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/FMinister/chrono_paste/internal/models"
+	"github.com/go-playground/form/v4"
 	_ "github.com/lib/pq"
 )
 
@@ -16,6 +17,7 @@ type application struct {
 	logger        *slog.Logger
 	chronos       *models.ChronoModel
 	templateCache map[string]*template.Template
+	formDecoder   *form.Decoder
 }
 
 func main() {
@@ -42,10 +44,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	formDecoder := form.NewDecoder()
+
 	app := &application{
 		logger:        logger,
 		chronos:       &models.ChronoModel{DB: db},
 		templateCache: templateCache,
+		formDecoder:   formDecoder,
 	}
 
 	logger.Info("starting server", slog.String("addr", *addr))
