@@ -13,6 +13,7 @@ type templateData struct {
 	Chrono      models.Chrono
 	Chronos     []models.Chrono
 	Form        any
+	Flash       string
 }
 
 var functions = template.FuncMap{

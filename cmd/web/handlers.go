@@ -52,8 +52,11 @@ func (app *application) chronoView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	flash := app.sessionManager.PopString(r.Context(), "flash")
+
 	data := app.newTemplateData(r)
 	data.Chrono = chrono
+	data.Flash = flash
 
 	app.render(w, r, http.StatusOK, "view.tmpl.html", data)
 }
@@ -92,6 +95,8 @@ func (app *application) chronoCreatePost(w http.ResponseWriter, r *http.Request)
 		app.serverError(w, r, err)
 		return
 	}
+
+	app.sessionManager.Put(r.Context(), "flash", "Chrono successfully created!")
 
 	http.Redirect(w, r, fmt.Sprintf("/chrono/view/%d", id), http.StatusSeeOther)
 }
