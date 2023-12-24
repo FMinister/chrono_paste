@@ -57,7 +57,7 @@ Create a new user for the application:
 ```sql
 CREATE USER <username> WITH PASSWORD '<password>';
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE chronos TO web;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE chronos TO <username>;
 
 ALTER USER web WITH PASSWORD '<password>';
 ```
