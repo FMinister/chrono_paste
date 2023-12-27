@@ -21,6 +21,7 @@ import (
 type application struct {
 	logger         *slog.Logger
 	chronos        *models.ChronoModel
+	users          *models.UserModel
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
@@ -60,6 +61,7 @@ func main() {
 	app := &application{
 		logger:         logger,
 		chronos:        &models.ChronoModel{DB: db},
+		users:          &models.UserModel{DB: db},
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
