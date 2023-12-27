@@ -102,3 +102,19 @@ INSERT INTO chronos (title, content, created, expires) VALUES (
     CURRENT_TIMESTAMP + INTERVAL '365 days'
 );
 ```
+
+Create a users table and give the user access to it:
+
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    hashed_password CHAR(60) NOT NULL,
+    created TIMESTAMP NOT NULL
+);
+
+ALTER TABLE users ADD CONSTRAINT users_uc_email UNIQUE (email);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO <username>;
+```
