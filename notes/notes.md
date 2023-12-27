@@ -117,4 +117,5 @@ CREATE TABLE users (
 ALTER TABLE users ADD CONSTRAINT users_uc_email UNIQUE (email);
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO <username>;
+GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO web;
 ```
