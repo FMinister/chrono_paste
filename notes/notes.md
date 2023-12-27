@@ -88,6 +88,8 @@ Grant the user access to the tables (don't forget to give access to all needed t
 
 ```sql
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE <tablename> TO <username>;
+
+GRANT USAGE, SELECT ON SEQUENCE chronos_id_seq TO <username>;
 ```
 
 Insert some data into the chronos table:
