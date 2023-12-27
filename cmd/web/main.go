@@ -64,8 +64,9 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr:    *addr,
-		Handler: app.routes(),
+		Addr:     *addr,
+		ErrorLog: slog.NewLogLogger(logger.Handler(), slog.LevelError),
+		Handler:  app.routes(),
 	}
 
 	logger.Info("starting server", slog.String("addr", srv.Addr))
