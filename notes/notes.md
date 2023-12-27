@@ -36,6 +36,12 @@ func (app *application) background(fn func()) {
 }
 ```
 
+Self signed certificate:
+
+```bash
+go run <GO PATH>src/crypto/tls/generate_cert.go --rsa-bits=2048 --host=localhost
+```
+
 ## Notes for Postgres
 
 Create the chronos table:
