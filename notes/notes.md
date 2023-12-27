@@ -64,10 +64,12 @@ Create a new user for the application:
 
 ```sql
 CREATE USER <username> WITH PASSWORD '<password>';
+```
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE chronos TO <username>;
+Change the user's password:
 
-ALTER USER web WITH PASSWORD '<password>';
+```sql
+ALTER USER <username> WITH PASSWORD '<password>';
 ```
 
 Create the sessions table:
@@ -80,6 +82,12 @@ CREATE TABLE sessions (
 );
 
 CREATE INDEX sessions_expiry_idx ON sessions (expiry);
+```
+
+Grant the user access to the tables (don't forget to give access to all needed tables):
+
+```sql
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE <tablename> TO <username>;
 ```
 
 Insert some data into the chronos table:
