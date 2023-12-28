@@ -9,11 +9,12 @@ import (
 )
 
 type templateData struct {
-	CurrentYear int
-	Chrono      models.Chrono
-	Chronos     []models.Chrono
-	Form        any
-	Flash       string
+	CurrentYear     int
+	Chrono          models.Chrono
+	Chronos         []models.Chrono
+	Form            any
+	Flash           string
+	IsAuthenticated bool
 }
 
 var functions = template.FuncMap{
