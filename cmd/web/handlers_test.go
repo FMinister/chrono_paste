@@ -8,6 +8,7 @@ import (
 )
 
 func TestPing(t *testing.T) {
+	t.Parallel()
 	app := newTestApplication(t)
 
 	ts := newTestServer(t, app.routes())
