@@ -18,6 +18,12 @@ type ChronoModel struct {
 	DB *sql.DB
 }
 
+type ChronoModelInterface interface {
+	Insert(title string, content string, expires int) (int, error)
+	Get(id int) (Chrono, error)
+	Latest() ([]Chrono, error)
+}
+
 func (m *ChronoModel) Insert(title string, content string, expires int) (int, error) {
 	stmt := `INSERT INTO chronos (title, content, created, expires) 
 			VALUES($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + '1 DAY'::INTERVAL * $3)

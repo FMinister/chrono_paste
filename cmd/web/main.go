@@ -20,8 +20,8 @@ import (
 
 type application struct {
 	logger         *slog.Logger
-	chronos        *models.ChronoModel
-	users          *models.UserModel
+	chronos        models.ChronoModelInterface
+	users          models.UserModelInterface
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
