@@ -19,6 +19,7 @@ import (
 )
 
 type application struct {
+	debug          bool
 	logger         *slog.Logger
 	chronos        models.ChronoModelInterface
 	users          models.UserModelInterface
@@ -30,6 +31,7 @@ type application struct {
 func main() {
 	addr := flag.String("addr", ":8080", "HTTP network address")
 	dsn := flag.String("dsn", "postgres://<username>:<password>@<url>:<port>/<db-name>?sslmode=disable", "PostgreSql data source name")
+	debug := flag.Bool("debug", false, "Debug mode")
 	flag.Parse()
 
 	// logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
@@ -59,6 +61,7 @@ func main() {
 	sessionManager.Cookie.Secure = true
 
 	app := &application{
+		debug:          *debug,
 		logger:         logger,
 		chronos:        &models.ChronoModel{DB: db},
 		users:          &models.UserModel{DB: db},
