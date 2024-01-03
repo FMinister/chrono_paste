@@ -184,3 +184,32 @@ func TestUserSignup(t *testing.T) {
 		})
 	}
 }
+
+func TestChronoCreate(t *testing.T) {
+	app := newTestApplication(t)
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	t.Run("Unauthenticated", func(t *testing.T) {
+		statusCode, headers, _ := ts.get(t, "/chrono/create")
+
+		assert.Equal(t, http.StatusSeeOther, statusCode)
+		assert.Equal(t, "/user/login", headers.Get("Location"))
+	})
+
+	t.Run("Authenticated", func(t *testing.T) {
+		_, _, body := ts.get(t, "/user/login")
+		validCSRFToken := extractCSRFToken(t, body)
+
+		form := url.Values{}
+		form.Add("email", "alice@example.com")
+		form.Add("password", "pa$$word")
+		form.Add("csrf_token", validCSRFToken)
+		ts.postForm(t, "/user/login", form)
+
+		statusCode, _, body := ts.get(t, "/chrono/create")
+
+		assert.Equal(t, http.StatusOK, statusCode)
+		assert.Contains(t, string(body), "<form action='/chrono/create' method='POST'>")
+	})
+}
