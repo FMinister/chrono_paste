@@ -26,7 +26,7 @@ func (app *application) routes() http.Handler {
 	dynamic := alice.New(app.sessionManager.LoadAndSave, noSurf, app.authenticate)
 
 	router.Handler(http.MethodGet, "/", dynamic.ThenFunc(app.home))
-	router.Handler(http.MethodGet, "/about", dynamic.ThenFunc(app.aboutPage))
+	router.Handler(http.MethodGet, "/about", dynamic.ThenFunc(app.aboutView))
 	router.Handler(http.MethodGet, "/chrono/view/:id", dynamic.ThenFunc(app.chronoView))
 	router.Handler(http.MethodGet, "/user/signup", dynamic.ThenFunc(app.userSignup))
 	router.Handler(http.MethodPost, "/user/signup", dynamic.ThenFunc(app.userSignupPost))
@@ -35,6 +35,7 @@ func (app *application) routes() http.Handler {
 
 	protected := dynamic.Append(app.requireAuthentication)
 
+	router.Handler(http.MethodGet, "/account/view", protected.ThenFunc(app.accountView))
 	router.Handler(http.MethodGet, "/chrono/create", protected.ThenFunc(app.chronoCreate))
 	router.Handler(http.MethodPost, "/chrono/create", protected.ThenFunc(app.chronoCreatePost))
 	router.Handler(http.MethodPost, "/user/logout", protected.ThenFunc(app.userLogoutPost))
