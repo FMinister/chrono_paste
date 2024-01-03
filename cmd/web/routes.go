@@ -39,6 +39,8 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/chrono/create", protected.ThenFunc(app.chronoCreate))
 	router.Handler(http.MethodPost, "/chrono/create", protected.ThenFunc(app.chronoCreatePost))
 	router.Handler(http.MethodPost, "/user/logout", protected.ThenFunc(app.userLogoutPost))
+	router.Handler(http.MethodGet, "/account/password/update", protected.ThenFunc(app.accountUpdatePasswordView))
+	router.Handler(http.MethodPost, "/account/password/update", protected.ThenFunc(app.accountUpdatePasswordPost))
 
 	standard := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 
